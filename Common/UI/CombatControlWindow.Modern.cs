@@ -6,8 +6,8 @@ namespace ErosUI;
 
 // 战斗控制悬浮条侧边栏模式（夜间/日间）：实心状态按钮（绿/黄/红 + 白色方块标记）
 // + 1px 竖分隔线 + 按钮化主动攻击（开启时实心红）+ 深色/白色设置按钮。
-// 交互与简约模式一致：状态按钮左键 运行⇄关闭、右键 运行⇄停手；主动攻击切换 AutoPull。
-// 两模式差异只有纯色半透明底色（无模糊，模糊仅简约模式），其余颜色随 SimplePalette 方案自动切换。
+// 状态按钮左键 运行⇄关闭、右键 运行⇄停手；主动攻击切换 AutoPull。
+// 两模式差异只有纯色半透明底色，其余颜色随 SimplePalette 方案自动切换。
 public sealed partial class CombatControlWindow
 {
     // 夜间模式悬浮条底色：半透明深灰（显式 AddRectFilled 填充，不做模糊）。
