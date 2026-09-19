@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+
+        <!-- 演示 ACR：编译即部署到游戏目录（目录名 = DLL 名 = Author = ErosUIDemo） -->
+        <OutputPath>$(APPDATA)\XIVLauncherCN\pluginConfigs\PromeRotation\ACR\ErosUIDemo</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="PromeRotation.SDK.CNGL" Version="0.1.0-preview.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\ErosUI.csproj" />
+    </ItemGroup>
+
+</Project>

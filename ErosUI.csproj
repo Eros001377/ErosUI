@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <!-- ErosActionRangeHook 的原生函数委托带指针参数，需要 unsafe -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+
+        <!-- UI 框架类库输出：本仓库 bin（引用方 ACR 工程引用本 DLL, 不再直接部署游戏目录） -->
+        <OutputPath Condition="'$(PublishBuild)' != 'true'">bin\Debug</OutputPath>
+        <OutputPath Condition="'$(PublishBuild)' == 'true'">bin\Publish</OutputPath>
+
+        <!-- 不再自动附加 net10.0-windows-->
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    </PropertyGroup>
+
+    <!-- 编译期引用统一走 PromeRotation SDK 包（国服 API15）：Dalamud / ImGui / FFXIVClientStructs /
+         InteropGenerator.Runtime / Lumina / Lumina.Excel / PromeRotation / PromeRotation.Scripting 全部
+         由包内 ref 程序集提供，ECommons 3.2.0.3 作为包依赖自动引入，与宿主发行版同版本。
+         不再依赖本机 XIVLauncherCN 安装目录即可编译；运行时同名程序集仍由游戏环境提供。
+         后续适配繁中服：换 PromeRotation.SDK.TC 包并同步调整目标框架与宿主 API 差异。 -->
+    <ItemGroup>
+        <PackageReference Include="PromeRotation.SDK.CNGL" Version="0.1.0-preview.3" />
+    </ItemGroup>
+
+    <!-- 出厂默认配置（首次使用落盘, 已有配置不覆盖）: 通用一份, 由
+         ErosSettings.ReadEmbeddedDefaultJson 按名读取（Eros.Resources.Default*.json）;
+         职业分档默认配置由使用方按 Default{JobTag}.json 自备 -->
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\DefaultCommon.json" />
+    </ItemGroup>
+
+
+</Project>
