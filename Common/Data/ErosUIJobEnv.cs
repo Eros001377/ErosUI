@@ -1,13 +1,12 @@
-﻿using ErosUI.Helper;
-using PromeRotation.Data;
+﻿using PromeRotation.Data;
 
-namespace ErosUI.Data;
+namespace ErosUI;
 
-// 职业环境注入点：使用方与框架的唯一耦合面。
+// 职业环境数据（框架内部使用）。对外注入入口是 ErosUIFramework.Configure。
 // 在 Rotation 构造函数最前面调用 Configure 注入职业身份与数据源，框架其余部分
 // 只读本类、不接触任何职业数据。宿主每次切换职业都会重新构造 Rotation 实例，
 // 所以构造时注入即可保证框架看到的永远是当前职业。
-public static class ErosUIJobEnv
+internal static class ErosUIJobEnv
 {
     /// <summary>职业短名（如 SAM / RPR），用作窗口名与配置文件名后缀。</summary>
     public static string JobTag { get; private set; } = "SAM";
@@ -42,9 +41,6 @@ public static class ErosUIJobEnv
     /// <summary>热键面板条目构建委托。框架不预置任何按钮，全部条目由使用方在此注册。</summary>
     public static System.Action<ErosUIHotkeyBuilder>? BuildHotkeys { get; private set; }
 
-    /// <summary>热键面板重建回调，设置页布局/显隐改动后触发。一般传 ErosUIHotkeyUI.Rebuild。</summary>
-    public static System.Action? RebuildHotkeys { get; private set; }
-
     /// <summary>QT 设置页「基础」页签的开关清单。元组为（键, 显示名, 技能ID），技能ID 为 0 时不校验解锁。</summary>
     public static (string key, string label, uint skill)[] QtTab基础 { get; private set; } = Array.Empty<(string, string, uint)>();
 
@@ -54,8 +50,8 @@ public static class ErosUIJobEnv
     /// <summary>QT 设置页「资源」页签的开关清单，格式同 QtTab基础。</summary>
     public static (string key, string label, uint skill)[] QtTab资源 { get; private set; } = Array.Empty<(string, string, uint)>();
 
-    /// <summary>注入本职业的全部环境。在 Rotation 构造函数最前面调用。</summary>
-    public static void Configure(
+    /// <summary>注入本职业的全部环境，由 ErosUIFramework.Configure 转发调用。</summary>
+    internal static void Configure(
         string jobTag,
         string jobName,
         IReadOnlyDictionary<string, bool> qtAll,
@@ -65,7 +61,6 @@ public static class ErosUIJobEnv
         IReadOnlyDictionary<string, (string key, bool invert)[]> qtCascadeRules,
         string[] hotkeyNames,
         System.Action<ErosUIHotkeyBuilder>? buildHotkeys,
-        System.Action? rebuildHotkeys = null,
         (string key, string label, uint skill)[]? qtTab基础 = null,
         (string key, string label, uint skill)[]? qtTab技能 = null,
         (string key, string label, uint skill)[]? qtTab资源 = null,
@@ -81,7 +76,6 @@ public static class ErosUIJobEnv
         QtCascadeRules = qtCascadeRules;
         HotkeyNames = hotkeyNames;
         BuildHotkeys = buildHotkeys;
-        RebuildHotkeys = rebuildHotkeys;
         if (qtTab基础 != null) QtTab基础 = qtTab基础;
         if (qtTab技能 != null) QtTab技能 = qtTab技能;
         if (qtTab资源 != null) QtTab资源 = qtTab资源;

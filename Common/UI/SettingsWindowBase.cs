@@ -2,9 +2,8 @@
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
-using ErosUI.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // ErosUI 武士设置窗口基类（Dalamud WindowSystem 托管）。
 // 夜间/日间模式 = 同一套侧边栏布局（SettingsWindowBase.Sidebar.cs）+ 深色/米白纯色半透明底色（无模糊）

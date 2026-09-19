@@ -3,9 +3,8 @@ using System.Text.Json.Serialization;
 using System.Numerics;
 using ECommons.DalamudServices;
 using ECommons.Logging;
-using ErosUI.UI;
 
-namespace ErosUI.Data;
+namespace ErosUI;
 
 // 多职业通用设置（单例，JSON 持久化到 Common.json，全部职业共用一份）。
 // 只收录框架层通用内容：界面主题（UIMode）与主题主色覆盖。

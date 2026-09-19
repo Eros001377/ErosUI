@@ -2,10 +2,9 @@
 using ECommons.DalamudServices;
 using ECommons.Logging;
 using PromeRotation.Config;
-using ErosUI.Helper;
 using PromeRotation.Data;
 
-namespace ErosUI.Data;
+namespace ErosUI;
 
 // 职业运行期设置（单例，JSON 持久化，按职业分文件: {JobTag}.json）。
 // 面板布局 / QT 显隐与默认值 / 排序等框架配置在此; 多职业通用内容（主题）在 ErosUICommonSettings（Common.json）。

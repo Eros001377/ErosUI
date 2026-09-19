@@ -1,11 +1,10 @@
 ﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
-using ErosUI.Data;
 using PromeRotation.Data;
 using PromeRotation.UI.QuickToggles;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // ErosUI 风格 QT 面板悬浮窗：
 // 由 ErosUIFramework.Install 注册进宿主 WindowSystem，Uninstall 摘除；显隐由控制条「QT」按钮切换。

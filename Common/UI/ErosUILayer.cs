@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 自绘背景窗口共用的绘制占位辅助。
 // 背景必须画进窗口自己的绘制列表，窗口叠加顺序才是对的：画进 viewport 背景层

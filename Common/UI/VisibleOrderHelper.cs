@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 面板拖拽排序共用小件：拖拽中的显示序列换算 + 格位让位动画。
 // QT 面板与热键面板共用。

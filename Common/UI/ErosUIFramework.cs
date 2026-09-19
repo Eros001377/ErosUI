@@ -2,19 +2,37 @@
 using Dalamud.Bindings.ImGui;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
-using ErosUI.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
-// ErosUI 框架门面：管理全部窗口在宿主 WindowSystem 里的注册与摘除。
-// Install/Uninstall 必须严格成对地放在 OnEnterAcr/OnExitAcr 里。
+// ErosUI 框架门面：使用方的唯一入口。Configure 注入职业环境，
+// Install/Uninstall 一站式装卸（窗口注册、热键面板、QT 注册、设置落盘全部内含），
+// 必须严格成对地放在 OnEnterAcr/OnExitAcr 里。
 public static class ErosUIFramework
 {
     private static CombatControlWindow? control;
     private static ErosUISettingsWindow? settings;
     private static ErosUIQtPanelWindow? qtPanel;
 
-    /// <summary>注册全部窗口到宿主 WindowSystem。幂等，重复调用会先卸载再注册。</summary>
+    /// <summary>注入本职业的全部环境。在 Rotation 构造函数最前面调用。</summary>
+    public static void Configure(
+        string jobTag,
+        string jobName,
+        IReadOnlyDictionary<string, bool> qtAll,
+        Func<string, bool> qtIsMetaKey,
+        Func<string, bool, bool> qtIsVisibleInMode,
+        Func<string, bool> qtDefault,
+        IReadOnlyDictionary<string, (string key, bool invert)[]> qtCascadeRules,
+        string[] hotkeyNames,
+        System.Action<ErosUIHotkeyBuilder>? buildHotkeys,
+        (string key, string label, uint skill)[]? qtTab基础 = null,
+        (string key, string label, uint skill)[]? qtTab技能 = null,
+        (string key, string label, uint skill)[]? qtTab资源 = null,
+        string? author = null)
+        => ErosUIJobEnv.Configure(jobTag, jobName, qtAll, qtIsMetaKey, qtIsVisibleInMode,
+            qtDefault, qtCascadeRules, hotkeyNames, buildHotkeys, qtTab基础, qtTab技能, qtTab资源, author);
+
+    /// <summary>注册全部窗口并完成初始化：构建热键面板、注册 QT、压制宿主自带面板。幂等，重复调用会先卸载再注册。OnEnterAcr 调用。</summary>
     public static void Install()
     {
         Uninstall();
@@ -40,13 +58,18 @@ public static class ErosUIFramework
         qtPanel = new ErosUIQtPanelWindow();
         ws.AddWindow(qtPanel);
         qtPanel.IsOpen = true;   // 默认打开
+
+        HidePrPanels(force: true);   // 切职业瞬间宿主会重弹自带面板，强制压制一次
+        ErosUIHotkeyUI.Rebuild();
+        APIHelper.重建QT可见性();
     }
 
-    /// <summary>从宿主 WindowSystem 摘除全部窗口。窗口可能已被宿主先行移除，该异常直接忽略。</summary>
+    /// <summary>卸载全部窗口与热键面板，并把两份设置落盘。OnExitAcr 调用，与 Install 严格成对。</summary>
     public static void Uninstall()
     {
+        ErosUIHotkeyUI.Uninstall();
         var ws = PromeRotation.Plugin.Instance?.WindowSystem;
-        if (ws == null) { control = null; settings = null; qtPanel = null; return; }
+        if (ws == null) { control = null; settings = null; qtPanel = null; SaveSettings(); return; }
 
         if (control != null)
         {
@@ -63,7 +86,21 @@ public static class ErosUIFramework
             try { ws.RemoveWindow(qtPanel); } catch (ArgumentException) { }
             qtPanel = null;
         }
+        SaveSettings();
     }
+
+    /// <summary>把通用设置与当前职业设置立即写入磁盘。</summary>
+    public static void SaveSettings()
+    {
+        ErosUISettings.Instance.Save();
+        ErosUICommonSettings.Instance.Save();
+    }
+
+    /// <summary>写入 QT 开关状态，并按联动表把关联的键一并写入。</summary>
+    public static void 设置QT(string qtKey, bool 值) => APIHelper.设置QT(qtKey, 值);
+
+    /// <summary>清空后按当前职业与当前模式重新注册 QT，并同步显隐配置到宿主。切换模式后调用。</summary>
+    public static void 重建QT可见性() => APIHelper.重建QT可见性();
 
     /// <summary>切换 QT 悬浮面板的显示/隐藏。</summary>
     public static void ToggleQtPanel()

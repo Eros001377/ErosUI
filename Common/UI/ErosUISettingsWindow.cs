@@ -1,6 +1,5 @@
-﻿using ErosUI.Data;
-
-namespace ErosUI.UI;
+﻿
+namespace ErosUI;
 
 // ErosUI 设置窗口（SettingsWindowBase 子类，多职业共用同一窗口类）。
 // 标题按职业环境注入（「ErosUI 武士设置」/「ErosUI 钐镰客设置」），页签结构两职业完全一致：

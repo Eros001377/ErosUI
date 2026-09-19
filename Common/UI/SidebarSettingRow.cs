@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 侧边栏模式（夜间/日间）行样式：控件在左、标签在右；节标题前置主题色圆点。
 // 夜间与日间的颜色差异由 SimplePalette 的 Dark/Light 方案承担，本类不含硬编码颜色。

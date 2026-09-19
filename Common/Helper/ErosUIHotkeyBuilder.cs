@@ -1,8 +1,7 @@
-﻿using ErosUI.Data;
-using PromeRotation.Data;
+﻿using PromeRotation.Data;
 using PromeRotation.UI.HotKey;
 
-namespace ErosUI.Helper;
+namespace ErosUI;
 
 // 热键面板构建器：按注册顺序产出条目列表，交给悬浮面板自绘（不使用宿主默认皮肤）。
 // 已在设置里隐藏的按钮名会自动过滤。

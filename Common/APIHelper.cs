@@ -1,19 +1,18 @@
 ﻿using ECommons.DalamudServices;
-using ErosUI.Data;
 using PromeRotation.Data;
 using PromeRotation.Helpers;
 
-namespace ErosUI.Helper;
+namespace ErosUI;
 
 // 框架的 QT 数据入口，只包含两个带附加逻辑的能力：
 // 联动写入（在宿主 SetQt 基础上叠加联动表）和可见性重建（按职业与模式重新注册 QT）。
 // 读 QT、屏幕提示、日志等与宿主一一等价的能力不在这里转发，直接用宿主 SDK。
-public static class APIHelper
+internal static class APIHelper
 {
     #region QT 读写
 
     /// <summary>写入 QT 开关状态，并按联动表把关联的键一并写入。</summary>
-    public static void 设置QT(string qtKey, bool 值)
+    internal static void 设置QT(string qtKey, bool 值)
     {
         PromeSettings.Instance.SetQt(qtKey, 值);
         var dict = PromeSettings.Instance.QuickToggles;
@@ -25,7 +24,7 @@ public static class APIHelper
     /// <summary>清空后按当前职业与当前模式重新注册 QT，并同步显隐配置到宿主。</summary>
     /// <remarks>宿主的 QuickToggles 是全局表，重建时会顺带清掉其它职业注册的键，
     /// 多个 ACR 共存时互不残留。切换职业或模式后调用。</remarks>
-    public static void 重建QT可见性()
+    internal static void 重建QT可见性()
     {
         var isHigh = ErosUISettings.Instance.IsHighEnd;
         var qt = PromeSettings.Instance.QuickToggles;

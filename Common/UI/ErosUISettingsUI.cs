@@ -1,11 +1,9 @@
 ﻿using System.Numerics;
-using ErosUI.Data;
-using ErosUI.Helper;
 using Dalamud.Bindings.ImGui;
 using PromeRotation.Helpers;
 using PromeRotation.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 设置面板 UI（多职业共用）。
 // QT面板页经 ErosUIJobEnv 读当前职业 QT 表；
@@ -247,7 +245,7 @@ public static class ErosUISettingsUI
         if (rebuild)
         {
             s.Save();
-            ErosUIJobEnv.RebuildHotkeys?.Invoke();
+            ErosUIHotkeyUI.Rebuild();
         }
     }
 

@@ -1,8 +1,7 @@
 ﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using ErosUI.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 侧边栏布局（夜间/日间模式共用）：左侧竖排导航（含末位「主题」页）+ 竖分隔线 + 右侧滚动内容区。
 // 全部颜色取自 SimplePalette（随 Dark/Light 方案变化），本文件不含硬编码颜色；

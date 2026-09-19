@@ -2,9 +2,8 @@
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
 using PromeRotation.Data;
-using ErosUI.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // ACR 战斗控制悬浮条（Dalamud WindowSystem 托管）。
 // 仅一个状态主按钮 + 主动攻击开关 + 设置按钮，无标题栏；纯色半透明底。

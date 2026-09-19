@@ -8,17 +8,18 @@
 
 ## 快速开始
 
+全部 API 集中在 `ErosUIFramework` 一个类，只需 `using ErosUI;`。
+
 1. 引用本工程（项目引用，或编译产物 `ErosUI.dll`）
 2. 在 Rotation 构造函数最前面注入职业环境
-3. 在生命周期回调里成对安装/卸载
+3. 在生命周期回调里成对调用 Install/Uninstall（各一个调用即可，内部已包含
+   热键面板构建、QT 注册与设置落盘）
 
 ```csharp
-using ErosUI.Data;
-using ErosUI.Helper;
-using ErosUI.UI;
+using ErosUI;
 
 // 2. 注入职业环境
-ErosUIJobEnv.Configure(
+ErosUIFramework.Configure(
     jobTag: "SAM",
     jobName: "武士",
     qtAll: MyQT.All,                       // QT 开关表：键 → 默认值
@@ -32,35 +33,25 @@ ErosUIJobEnv.Configure(
         b.Fixed("疾跑", 7571u, ActionType.OffGcd, ActionTargetType.Self);
         b.Execute("爆发药", new ExecuteLogic(() => { /* ... */ }));
     },
-    rebuildHotkeys: ErosUIHotkeyUI.Rebuild,
     qtTab基础: [ ("aoe", "AOE 模式", 0u) ],
     author: "你的作者名");   // 见下文「作者身份」
 ```
 
 ```csharp
 // 3. 生命周期：严格成对调用
-public void OnEnterAcr()
-{
-    ErosUIFramework.Install();       // 注册全部窗口
-    ErosUIHotkeyUI.Rebuild();        // 构建热键面板
-    APIHelper.重建QT可见性();         // 按显隐配置注册 QT
-}
-
-public void OnExitAcr()
-{
-    ErosUIHotkeyUI.Uninstall();
-    ErosUIFramework.Uninstall();
-    ErosUISettings.Instance.Save();
-    ErosUICommonSettings.Instance.Save();
-}
+public void OnEnterAcr() => ErosUIFramework.Install();
+public void OnExitAcr() => ErosUIFramework.Uninstall();
 ```
+
+需要时还可直接使用门面上的其余入口：`设置QT`（带联动写入）、`重建QT可见性`
+（切换模式后重注册）、`SaveSettings`（立即落盘）、`ToggleQtPanel` / `OpenSettings`
+/ `SetPanelsVisible` / `DrawSettingsEntry`（宿主 DrawSettings 入口按钮）。
 
 ## 模块组成
 
 | 组件 | 说明 |
 |------|------|
-| `ErosUIFramework` | 框架门面：Install/Uninstall 注册全部窗口，面板开关入口 |
-| `ErosUIJobEnv` | 注入接口：使用方与框架的唯一耦合面 |
+| `ErosUIFramework` | 唯一公共入口：Configure 注入、Install/Uninstall 装卸（内含热键/QT/落盘）、面板开关 |
 | `Common/UI/SettingsWindowBase*` | 设置窗口（侧边栏页签布局 + 主题页） |
 | `Common/UI/ErosUISettingsUI.cs` | 设置页内容（基础设置 / Hotkey / QT面板 三页） |
 | `Common/UI/ErosUIQtPanelWindow.cs` | QT 悬浮面板（网格布局、拖拽排序、按模式记忆显隐） |
@@ -68,8 +59,7 @@ public void OnExitAcr()
 | `Common/UI/CombatControlWindow*.cs` | 战斗控制条（运行/停手/主动攻击/设置入口） |
 | `Common/UI/SimplePalette.cs` | 日间/夜间双主题色板，主题页可自定义主色 |
 | `Common/Data/` | 配置持久化（通用 + 按职业分档的 JSON） |
-| `Common/Helper/ErosUIHotkeyBuilder.cs` | 热键面板条目构建器 |
-| `APIHelper` | QT 联动写入与可见性重建 |
+| `ErosUIHotkeyBuilder` | 热键面板条目构建器（Configure 注入用） |
 
 ## 依赖
 
@@ -83,10 +73,10 @@ public void OnExitAcr()
 ErosUI/
 ├── ErosUI.csproj
 ├── Common/
-│   ├── APIHelper.cs
-│   ├── Data/            （注入接口、设置持久化、主题模式）
+│   ├── APIHelper.cs     （QT 联动写入与可见性重建，内部使用）
+│   ├── Data/            （职业环境、设置持久化、主题模式）
 │   ├── Helper/          （热键构建器）
-│   └── UI/              （全部窗口与控件）
+│   └── UI/              （框架门面与全部窗口控件）
 └── Resources/           （可选：按 Default{JobTag}.json 提供各职业出厂配置）
 ```
 

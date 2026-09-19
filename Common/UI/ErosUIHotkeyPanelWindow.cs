@@ -3,14 +3,13 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface.Windowing;
 using ECommons.DalamudServices;
-using ErosUI.Data;
 using PromeRotation.Data;
 using PromeRotation.Extensions;
 using PromeRotation.Helpers;
 using PromeRotation.Managers;
 using PromeRotation.UI.HotKey;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // ErosUI 风格热键面板：窗口外壳（NoBackground + viewport 背景层圆角底 +
 // 外扩裁剪描边 + 每帧按网格精确尺寸），图标/冷却/点击用宿主公开件渲染

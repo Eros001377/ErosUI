@@ -1,6 +1,6 @@
 ﻿using Dalamud.Bindings.ImGui;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 设置行工具（简约模式实现）：每个方法对应一行设置，自动处理标签、tooltip、值变更回调。
 // 夜间/日间模式的行样式由 SidebarSettingRow 承载（两模式共用布局，配色随 SimplePalette 方案），

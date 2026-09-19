@@ -1,9 +1,8 @@
 ﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using PromeRotation.Data;
-using ErosUI.Data;
 
-namespace ErosUI.UI;
+namespace ErosUI;
 
 // 战斗控制悬浮条侧边栏模式（夜间/日间）：实心状态按钮（绿/黄/红 + 白色方块标记）
 // + 1px 竖分隔线 + 按钮化主动攻击（开启时实心红）+ 深色/白色设置按钮。
