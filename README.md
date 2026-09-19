@@ -64,7 +64,7 @@ public void OnExitAcr() => ErosUIFramework.Uninstall();
 ## 依赖
 
 - .NET 10.0 Windows
-- [PromeRotation]
+- PromeRotation
 
 ## 目录结构
 
