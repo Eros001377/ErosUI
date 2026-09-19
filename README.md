@@ -64,8 +64,7 @@ public void OnExitAcr() => ErosUIFramework.Uninstall();
 ## 依赖
 
 - .NET 10.0 Windows
-- [PromeRotation](https://github.com/kanyeishere/PRACR)（编译期走 `PromeRotation.SDK.CNGL` NuGet 包）
-- Dalamud / ECommons / Lumina（运行时由游戏环境随宿主提供）
+- [PromeRotation]
 
 ## 目录结构
 
