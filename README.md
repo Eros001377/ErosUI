@@ -77,7 +77,6 @@ ErosUI/
 │   ├── Data/            （职业环境、设置持久化、主题模式）
 │   ├── Helper/          （热键构建器）
 │   └── UI/              （框架门面与全部窗口控件）
-└── Resources/           （可选：按 Default{JobTag}.json 提供各职业出厂配置）
 ```
 
 ## 作者身份（author）
