@@ -88,9 +88,9 @@ public sealed partial class CombatControlWindow : Window
     {
         if (ImGui.GetWindowViewport().ID != ImGui.GetMainViewport().ID) return;
 
-        // 兼容兜底：底色画到 background draw list，避开窗口 list 首个 cmd 被
-        // PrependBlurBehind（Insert(0)）替换的坑（详见 SimpleSettingsWindow.DrawWindowBackground）。
-        // 前置 0.5px 对齐像素中心，保证圆角与半透明边抗锯齿正常。
+        // 底色画到视口背景层即可（本窗口是 NoDecoration 小窗，不参与背景模糊，
+        // 无需像其他窗口那样垫占位命令）。矩形整体内缩半像素对齐像素中心，
+        // 保证圆角与半透明描边的抗锯齿正常。
         var min = ImGui.GetWindowPos() + new Vector2(0.5f);
         var max = min + ImGui.GetWindowSize() - new Vector2(1f);
         // 圆角必须与 PreDraw 压入的 WindowRounding(10f) 完全一致，否则模糊/底色的角与窗口边框错位
