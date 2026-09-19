@@ -17,7 +17,7 @@ using ErosUI.Data;
 using ErosUI.Helper;
 using ErosUI.UI;
 
-// 2. 注入职业环境（完整可运行示例见 examples/ErosUIDemo）
+// 2. 注入职业环境
 ErosUIJobEnv.Configure(
     jobTag: "SAM",
     jobName: "武士",
@@ -87,10 +87,8 @@ ErosUI/
 │   ├── Data/            （注入接口、设置持久化、主题模式）
 │   ├── Helper/          （热键构建器）
 │   └── UI/              （全部窗口与控件）
-├── Resources/
-│   └── DefaultCommon.json   （首次使用的出厂配置）
-└── examples/
-    └── ErosUIDemo/      （最小演示 ACR，可直接编译部署到游戏）
+└── Resources/
+    └── DefaultCommon.json   （首次使用的出厂配置）
 ```
 
 ## 作者身份（author）
