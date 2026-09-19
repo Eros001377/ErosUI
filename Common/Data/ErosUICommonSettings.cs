@@ -64,8 +64,8 @@ public class ErosUICommonSettings
             }
             else
             {
-                // 首次使用: 直接落内嵌出厂配置（Resources/DefaultCommon.json），无内嵌资源再走代码默认
-                var s = Normalize(LoadEmbeddedDefaults() ?? new ErosUICommonSettings());
+                // 首次使用: 按代码默认值初始化并立即落盘
+                var s = Normalize(new ErosUICommonSettings());
                 s.Save();
                 PluginLog.Log($"[{ErosUIJobEnv.作者}] 通用设置已初始化: {FilePath}");
                 return s;
@@ -76,20 +76,6 @@ public class ErosUICommonSettings
     }
 
 
-    // 读取内嵌的出厂通用配置（Resources/DefaultCommon.json，随 DLL 发布）
-    private static ErosUICommonSettings? LoadEmbeddedDefaults()
-    {
-        try
-        {
-            var json = ErosUISettings.ReadEmbeddedDefaultJson("DefaultCommon.json");
-            return json == null ? null : JsonSerializer.Deserialize<ErosUICommonSettings>(json, JsonOptions);
-        }
-        catch (Exception e)
-        {
-            PluginLog.Error($"[{ErosUIJobEnv.作者}] 内嵌通用配置解析失败: {e.Message}");
-            return null;
-        }
-    }
 
     private static ErosUICommonSettings Normalize(ErosUICommonSettings s)
     {

@@ -26,12 +26,5 @@
         <PackageReference Include="PromeRotation.SDK.CNGL" Version="0.1.0-preview.3" />
     </ItemGroup>
 
-    <!-- 出厂默认配置（首次使用落盘, 已有配置不覆盖）: 通用一份, 由
-         ErosSettings.ReadEmbeddedDefaultJson 按名读取（Eros.Resources.Default*.json）;
-         职业分档默认配置由使用方按 Default{JobTag}.json 自备 -->
-    <ItemGroup>
-        <EmbeddedResource Include="Resources\DefaultCommon.json" />
-    </ItemGroup>
-
 
 </Project>

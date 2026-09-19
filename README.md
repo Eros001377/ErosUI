@@ -87,8 +87,7 @@ ErosUI/
 │   ├── Data/            （注入接口、设置持久化、主题模式）
 │   ├── Helper/          （热键构建器）
 │   └── UI/              （全部窗口与控件）
-└── Resources/
-    └── DefaultCommon.json   （首次使用的出厂配置）
+└── Resources/           （可选：按 Default{JobTag}.json 提供各职业出厂配置）
 ```
 
 ## 作者身份（author）
@@ -106,8 +105,8 @@ ErosUI/
 
 - 通用（主题等）：`pluginConfigs\PromeRotation\Settings\ACRConfig\<作者>\Common.json`
 - 按职业：同目录 `{JobTag}.json`（如 `SAM.json`）
-- 首次使用自动落出厂配置；职业分档默认配置由使用方按 `Default{JobTag}.json`
-  自备嵌入资源（缺省走代码默认值）
+- 首次使用按代码默认值自动落盘；想给某个职业预置出厂配置，
+  按 `Default{JobTag}.json` 提供嵌入资源即可（缺省同样走代码默认值）
 
 ## 许可证
 
