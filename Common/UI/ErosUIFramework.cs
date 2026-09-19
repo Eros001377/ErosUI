@@ -6,16 +6,15 @@ using ErosUI.Data;
 
 namespace ErosUI.UI;
 
-// ErosUI 门面：窗口注册进宿主的 WindowSystem（PR 统一绘制与生命周期托管），
-// Install/Uninstall 严格成对放在 OnEnterAcr/OnExitAcr。
-// PR 本体面板隐藏：HidePrPanels（UI 线程 1 秒节流，控制条 PreDraw 触发）
+// ErosUI 框架门面：管理全部窗口在宿主 WindowSystem 里的注册与摘除。
+// Install/Uninstall 必须严格成对地放在 OnEnterAcr/OnExitAcr 里。
 public static class ErosUIFramework
 {
     private static CombatControlWindow? control;
     private static ErosUISettingsWindow? settings;
     private static ErosUIQtPanelWindow? qtPanel;
 
-    // 注册全部窗口到宿主 WindowSystem（幂等：先卸再装）
+    /// <summary>注册全部窗口到宿主 WindowSystem。幂等，重复调用会先卸载再注册。</summary>
     public static void Install()
     {
         Uninstall();
@@ -43,7 +42,7 @@ public static class ErosUIFramework
         qtPanel.IsOpen = true;   // 默认打开
     }
 
-    // 从宿主 WindowSystem 摘除全部窗口（吞 ArgumentException：窗口可能已被宿主移除）
+    /// <summary>从宿主 WindowSystem 摘除全部窗口。窗口可能已被宿主先行移除，该异常直接忽略。</summary>
     public static void Uninstall()
     {
         var ws = PromeRotation.Plugin.Instance?.WindowSystem;
@@ -66,38 +65,37 @@ public static class ErosUIFramework
         }
     }
 
-    // 开关 QT 面板悬浮窗
+    /// <summary>切换 QT 悬浮面板的显示/隐藏。</summary>
     public static void ToggleQtPanel()
     {
         if (qtPanel == null) return;
         qtPanel.IsOpen = !qtPanel.IsOpen;
     }
 
-    // QT 或热键悬浮面板任一可见（设置页「面板控制」按钮状态依据）
+    /// <summary>QT 面板与热键面板是否至少有一个在显示（设置页「面板控制」按钮的状态依据）。</summary>
     public static bool 任一面板可见 => (qtPanel?.IsOpen ?? false) || ErosUIHotkeyUI.PanelVisible;
 
-    // 一键显示/隐藏 QT 面板与热键面板（设置页「面板控制」按钮）。
-    // 仅切显隐不重建窗口。
+    /// <summary>一键显示/隐藏 QT 面板与热键面板。只切换显隐，不重建窗口。</summary>
     public static void SetPanelsVisible(bool visible)
     {
         if (qtPanel != null) qtPanel.IsOpen = visible;
         ErosUIHotkeyUI.SetPanelVisible(visible);
     }
 
-    // 打开设置窗口
+    /// <summary>打开设置窗口。</summary>
     public static void OpenSettings()
     {
         if (settings != null) settings.IsOpen = true;
     }
 
-    // 开/关设置窗口（战斗控制条设置按钮：开着时再点一次关闭）
+    /// <summary>切换设置窗口的打开/关闭（战斗控制条「设置」按钮使用）。</summary>
     public static void ToggleSettings()
     {
         if (settings == null) return;
         settings.IsOpen ^= true;
     }
 
-    // PR DrawSettings 回调内嵌入口：一个打开设置窗口的按钮
+    /// <summary>给宿主 DrawSettings 回调用的入口：绘制一个打开设置窗口的按钮。</summary>
     public static void DrawSettingsEntry()
     {
         if (ImGui.Button($"打开 {ErosUIJobEnv.作者} 设置窗口"))
@@ -105,15 +103,17 @@ public static class ErosUIFramework
     }
 
     // ============================================================
-    // === PR 本体面板隐藏（UI 线程节流压制，1 秒一次） ===
+    // === 宿主本体面板压制 ===
     // ============================================================
     private static long _上次HidePrPanels;
 
-    // 隐藏 PR 本体的战斗控制/QT 面板。
-    // 必须在 UI 线程调用（控制条 PreDraw 内节流触发）——
-    // 切勿挂 Framework.Update：跨线程改写 WindowSystem.IsOpen 会与渲染竞争，导致全游戏 ImGui 交互假死（实测踩坑）。
-    // force=true 绕过 1 秒节流：切职业时旧控制条刚卸、宿主会重新弹出本体面板，
-    // 常规节流调用会被上次 PreDraw 的节流窗口吞掉导致闪现，OnEnterAcr 必须强制执行。
+    /// <summary>关闭宿主自带的 QT 面板窗口，防止它与本框架的面板同时出现。</summary>
+    /// <remarks>
+    /// 只能在 UI 线程调用（由控制条每帧触发，内部 1 秒节流）。
+    /// 不要挂到 Framework.Update：那会在渲染线程之外改窗口状态，与渲染竞争后
+    /// 会导致整个游戏的 ImGui 交互假死。force 参数绕过节流立即执行，供切职业时
+    /// 抑制宿主重新弹出的面板。
+    /// </remarks>
     public static void HidePrPanels(bool force = false)
     {
         var now = Environment.TickCount64;
@@ -122,7 +122,7 @@ public static class ErosUIFramework
         try { PromeRotation.Plugin.Instance?.CloseQtWindow(); } catch { /* 宿主未就绪 */ }
     }
 
-    // 存档位置钳制到屏幕工作区内（读档超界/换分辨率兜底）
+    // 存档位置钳制在屏幕工作区内，防止读取越界存档或切换分辨率后窗口跑出屏幕。
     private static Vector2 限制存档位置(Vector2? saved)
     {
         if (saved is not Vector2 v) return new Vector2(40f, 220f);

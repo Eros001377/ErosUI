@@ -5,14 +5,14 @@ using PromeRotation.Helpers;
 
 namespace ErosUI.Helper;
 
-// UI 框架自用的 QT 数据入口 —— 只收口带框架附加逻辑的少数能力：
-// 联动写入（宿主 SetQt + 联动表）与可见性重建（按职业/模式注册 QT）。
-// 其余与宿主等价的能力（读 QT / 屏幕提示 / 日志）不在此转发, 直接用宿主 SDK。
+// 框架的 QT 数据入口，只包含两个带附加逻辑的能力：
+// 联动写入（在宿主 SetQt 基础上叠加联动表）和可见性重建（按职业与模式重新注册 QT）。
+// 读 QT、屏幕提示、日志等与宿主一一等价的能力不在这里转发，直接用宿主 SDK。
 public static class APIHelper
 {
     #region QT 读写
 
-    // 设置 QT 开关状态：宿主 SetQt 为基座, 叠加当前职业环境的联动表批量写入
+    /// <summary>写入 QT 开关状态，并按联动表把关联的键一并写入。</summary>
     public static void 设置QT(string qtKey, bool 值)
     {
         PromeSettings.Instance.SetQt(qtKey, 值);
@@ -22,8 +22,9 @@ public static class APIHelper
                 dict[lk] = inv ? !值 : 值;
     }
 
-    // 重建 QT 可见性：ClearQts 后只注册当前职业、当前模式可见的 QT。
-    // 多职业共存: 同时清除 QuickToggles 里其它职业注册的 QT 键（宿主全局表, 不清会串台）。
+    /// <summary>清空后按当前职业与当前模式重新注册 QT，并同步显隐配置到宿主。</summary>
+    /// <remarks>宿主的 QuickToggles 是全局表，重建时会顺带清掉其它职业注册的键，
+    /// 多个 ACR 共存时互不残留。切换职业或模式后调用。</remarks>
     public static void 重建QT可见性()
     {
         var isHigh = ErosUISettings.Instance.IsHighEnd;

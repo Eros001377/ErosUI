@@ -76,9 +76,9 @@ public sealed class ErosUIQtPanelWindow : Window
         // 按用户自定义顺序排列（QT面板页、面板拖拽调整; 未调整过 = 注册原序）
         defs = 按自定义顺序排序(defs);
 
-        // 每帧显式设置尺寸精确贴合按钮网格。
-        // 勿改回 AlwaysAutoResize：自适应路径会被持久化/缩放干扰，窗口比内容宽出一截，
-        // 左右多出透明边（实测踩坑）。
+        // 每帧显式设置尺寸，让窗口精确贴合按钮网格。
+        // 不要改回 AlwaysAutoResize：自适应尺寸会被窗口状态持久化干扰，
+        // 导致窗口比内容宽出一截、左右多出透明边。
         ImGui.SetWindowSize(计算窗口尺寸(defs.Count), ImGuiCond.Always);
 
         DrawWindowChrome();
@@ -258,9 +258,8 @@ public sealed class ErosUIQtPanelWindow : Window
         }
     }
 
-    // 面板底色 + 边框：
-    // 画进窗口自身 draw list 的首个内容（垫牺牲帧防 Dalamud 模糊垫底吃掉 cmd[0], 详见 ErosUILayer）:
-    // 保窗口叠序, 盖住身后窗口内容——底色沉到 viewport 背景层会让两窗重叠时内容互相穿透。
+    // 面板底色与边框：画进窗口自身的绘制列表（先垫占位命令，见 ErosUILayer），
+    // 保证两个窗口重叠时背景仍然盖住身后窗口的内容。
     private void DrawWindowChrome()
     {
         var pos = ImGui.GetWindowPos();

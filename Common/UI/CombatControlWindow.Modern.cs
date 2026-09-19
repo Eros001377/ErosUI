@@ -33,8 +33,9 @@ public sealed partial class CombatControlWindow
     private const float DividerAdvance = 12f;
 
     // 按钮行总宽 = 状态 + 分隔 + 主动攻击 + 分隔 + 设置。
-    // 顶部拖动细条必须用这个固定宽——勿改回 GetContentRegionAvail().X：
-    // 宽随窗口自馈后 AlwaysAutoResize 只涨不缩，删按钮后背景收不回来（实测踩坑）。
+    // 顶部拖动条必须用这个固定宽度，不要改成取可用区域宽度：
+    // 可用宽度会随窗口变宽形成自反馈，而自动尺寸的窗口只会变大不会变小，
+    // 按钮减少后背景就再也收不回去。
     private const float RowWidth = StateButtonWidth + DividerAdvance + AutoPullButtonWidth + DividerAdvance + SettingsButtonWidth;
 
     // 按界面模式取悬浮条底色。

@@ -281,8 +281,8 @@ public abstract partial class SettingsWindowBase : Window
         // 仅主视口生效；夜间/日间用各自常量纯色半透明底色
         if (ImGui.GetWindowViewport().ID != ImGui.GetMainViewport().ID) return;
 
-        // 底色画进窗口自身 draw list 的首个内容（垫牺牲帧防 Dalamud 模糊垫底吃掉 cmd[0],
-        // 详见 ErosUILayer）: 保窗口叠序——背景沉到 viewport 背景层会让两窗重叠时内容互相穿透
+        // 底色画进窗口自身的绘制列表，先垫占位命令防止背景模糊顶掉首条绘制（见 ErosUILayer），
+        // 保证两个窗口重叠时背景仍然盖住身后窗口的内容
         var min = ImGui.GetWindowPos() + new Vector2(0.5f);
         var max = min + ImGui.GetWindowSize() - new Vector2(1f);
 

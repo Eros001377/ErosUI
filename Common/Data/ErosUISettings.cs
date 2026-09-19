@@ -139,10 +139,9 @@ public class ErosUISettings
         return result;
     }
 
-    // 把指定 QT 移到面板可见序列的目标位置（插入语义）。
-    // 目标索引按悬浮面板当前显示的格子序计——与渲染同一坐标系,
-    // 模式隐藏/显隐隐藏的键不占位（否则错位会导致拖拽"面板没变但显隐页顺序变了"或原地不动, 实测踩坑）;
-    // 隐藏键保持原槽位穿插, 不随可见键的移动而洗牌。落盘并重建 QT 注册序。
+    // 把指定 QT 移动到面板上的目标位置（插入语义）。
+    // 目标索引按面板当前显示的格子计数，被隐藏的键不占格子；隐藏键留在原槽位，
+    // 不随可见键的移动而重排。移动后落盘并重建 QT 注册顺序。
     public void MoveQt(string key, int 可见目标索引)
     {
         var qt = PromeSettings.Instance.QuickToggles;
@@ -186,10 +185,8 @@ public class ErosUISettings
         return result;
     }
 
-    // 把指定热键移到面板可见序列的目标位置（插入语义）。
-    // 目标索引按悬浮面板当前显示的格子序计——与渲染同一坐标系, 显隐隐藏的名字不占位
-    // （否则错位会导致拖拽"面板没变但显隐页顺序变了"或原地不动, 实测踩坑）;
-    // 隐藏键保持原槽位穿插, 不随可见键的移动而洗牌。落盘即可——面板每帧按此顺序重排, 无需重建。
+    // 把指定热键移动到面板上的目标位置（插入语义），索引口径与 MoveQt 相同：
+    // 按面板当前显示的格子计数，被隐藏的名字不占格子。面板每帧按此顺序重排，落盘即可。
     public void MoveHotkey(string name, int 可见目标索引)
     {
         var hidden = HiddenHotkeys;
@@ -302,7 +299,7 @@ public class ErosUISettings
 
     // 配置文件名按当前职业: JobTag 由使用方经 ErosUIJobEnv.Configure 注入, 以它为准。
     // 不读 Core.Me——宿主切职业/登录加载存在 ClassJob.RowId 未落地(仍报旧职业)的窗口期,
-    // 读玩家会把 ACR 绑到错误职业的配置: 显隐回填错套、跨职业配置互写损坏（实测踩坑）。
+    // 登录或切职业的瞬间读取玩家职业可能拿到旧值，据此加载会把配置绑到错误职业的文件上。
     public static string 职业文件名 => ErosUIJobEnv.JobTag;
 
     public static string FilePath

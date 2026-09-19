@@ -344,9 +344,8 @@ public sealed class ErosUIHotkeyPanelWindow : Window
     // ============================================================
     // === 外壳与拖动 ===
     // ============================================================
-    // 面板底色 + 边框：
-    // 画进窗口自身 draw list 的首个内容（垫牺牲帧防 Dalamud 模糊垫底吃掉 cmd[0], 详见 ErosUILayer）:
-    // 保窗口叠序, 盖住身后窗口内容——底色沉到 viewport 背景层会让两窗重叠时内容互相穿透。
+    // 面板底色与边框：画进窗口自身的绘制列表（先垫占位命令，见 ErosUILayer），
+    // 保证两个窗口重叠时背景仍然盖住身后窗口的内容。
     private void DrawWindowChrome()
     {
         var pos = ImGui.GetWindowPos();
