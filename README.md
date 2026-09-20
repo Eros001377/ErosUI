@@ -49,8 +49,9 @@ public void OnExitAcr() => ErosUIFramework.Uninstall();
 ```
 
 需要时还可直接使用门面上的其余入口：`设置QT`（带联动写入）、`重建QT可见性`
-（切换模式后重注册）、`SaveSettings`（立即落盘）、`ToggleQtPanel` / `OpenSettings`
-/ `SetPanelsVisible` / `DrawSettingsEntry`（宿主 DrawSettings 入口按钮）。
+（切换模式后重注册）、`SaveSettings`（立即落盘）、`QtPanelVisible` /
+`SetQtPanelVisible` 与 `HotkeyPanelVisible` / `SetHotkeyPanelVisible`（两个悬浮
+面板各自独立控制）、`OpenSettings`、`DrawSettingsEntry`（宿主 DrawSettings 入口按钮）。
 
 ## 模块组成
 

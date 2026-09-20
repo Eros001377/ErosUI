@@ -111,15 +111,20 @@ public static class ErosUIFramework
         qtPanel.IsOpen = !qtPanel.IsOpen;
     }
 
-    /// <summary>QT 面板与热键面板是否至少有一个在显示（设置页「面板控制」按钮的状态依据）。</summary>
-    public static bool 任一面板可见 => (qtPanel?.IsOpen ?? false) || ErosUIHotkeyUI.PanelVisible;
+    /// <summary>QT 悬浮面板当前是否可见。</summary>
+    public static bool QtPanelVisible => qtPanel?.IsOpen ?? false;
 
-    /// <summary>一键显示/隐藏 QT 面板与热键面板。只切换显隐，不重建窗口。</summary>
-    public static void SetPanelsVisible(bool visible)
+    /// <summary>显示/隐藏 QT 悬浮面板。只切换显隐，不重建窗口。</summary>
+    public static void SetQtPanelVisible(bool visible)
     {
         if (qtPanel != null) qtPanel.IsOpen = visible;
-        ErosUIHotkeyUI.SetPanelVisible(visible);
     }
+
+    /// <summary>热键悬浮面板当前是否可见。</summary>
+    public static bool HotkeyPanelVisible => ErosUIHotkeyUI.PanelVisible;
+
+    /// <summary>显示/隐藏热键悬浮面板。只切换显隐，不重建窗口。</summary>
+    public static void SetHotkeyPanelVisible(bool visible) => ErosUIHotkeyUI.SetPanelVisible(visible);
 
     /// <summary>打开设置窗口。</summary>
     public static void OpenSettings()
