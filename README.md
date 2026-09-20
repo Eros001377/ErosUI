@@ -1,6 +1,6 @@
 # ErosUI
 
-基于 PromeRotation 的 ACR 通用 UI 框架。由ErosACR默认主题分离、接入后你的 ACR 直接获得一套完整的界面：
+基于 PromeRotation 的 ACR 通用 UI 框架，从 ErosACR 的默认主题中分离而来。接入后你的 ACR 直接获得一套完整的界面：
 
 - QT / Hotkey 悬浮面板：按钮显隐、右键拖拽排序、布局可调
 - 战斗控制条：运行 / 停手 / 主动攻击 / 设置入口
