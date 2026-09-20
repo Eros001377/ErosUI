@@ -1,5 +1,7 @@
 # ErosUI
 
+纯AI从我的ACR里蒸馏出来的东西 看着用奥
+
 基于 PromeRotation 的 ACR 通用 UI 框架。接入后你的 ACR 直接获得一套完整的界面：
 QT / Hotkey 面板显隐 按钮显隐 拖拽排序 · 日夜主题 颜色RGB可调节
 
