@@ -57,15 +57,19 @@ public static class ErosUISettingsUI
     }
 
     // ============================================================
-    // QT 面板与热键面板悬浮窗的显隐开关，点击切换（基础设置页「面板控制」分节）
+    // 独立控制 QT 面板与热键面板悬浮窗的显隐（基础设置页「面板控制」分节）
     private static void DrawPanelsVisibilityButton()
     {
-        if (SettingRow.Button("QT 面板", "点击切换 QT 开关悬浮面板的显示/隐藏"))
-            ErosUIFramework.SetQtPanelVisible(!ErosUIFramework.QtPanelVisible);
+        var qtVisible = ErosUIFramework.QtPanelVisible;
+        if (SettingRow.Button(qtVisible ? "隐藏 QT 面板" : "显示 QT 面板",
+                "显示/隐藏 QT 开关悬浮面板"))
+            ErosUIFramework.SetQtPanelVisible(!qtVisible);
 
+        var hotkeyVisible = ErosUIFramework.HotkeyPanelVisible;
         ImGui.SameLine(0f, 12f);
-        if (SettingRow.Button("Hotkey 面板", "点击切换热键按钮悬浮面板的显示/隐藏"))
-            ErosUIFramework.SetHotkeyPanelVisible(!ErosUIFramework.HotkeyPanelVisible);
+        if (SettingRow.Button(hotkeyVisible ? "隐藏 Hotkey 面板" : "显示 Hotkey 面板",
+                "显示/隐藏热键按钮悬浮面板"))
+            ErosUIFramework.SetHotkeyPanelVisible(!hotkeyVisible);
     }
 
     // ============================================================
