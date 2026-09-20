@@ -1,9 +1,10 @@
 # ErosUI
 
-纯AI从我的ACR里蒸馏出来的东西 看着用奥
-
 基于 PromeRotation 的 ACR 通用 UI 框架。接入后你的 ACR 直接获得一套完整的界面：
-QT / Hotkey 面板显隐 按钮显隐 拖拽排序 · 日夜主题 颜色RGB可调节
+
+- QT / Hotkey 悬浮面板：按钮显隐、右键拖拽排序、布局可调
+- 战斗控制条：运行 / 停手 / 主动攻击 / 设置入口
+- 日夜双主题，主色 RGB 自定义
 
 框架本身不包含任何职业逻辑。QT 开关表、热键按钮等内容全部由使用方注入，
 框架不预置任何按钮或技能，接入什么就显示什么。
@@ -21,6 +22,8 @@ QT / Hotkey 面板显隐 按钮显隐 拖拽排序 · 日夜主题 颜色RGB可�
 using ErosUI;
 
 // 2. 注入职业环境
+// 注意：MyQT、MyJobNames、CommonNames、ExecuteLogic 都是占位名，
+// 换成你自己 ACR 里的类型，这段示例不能直接复制编译
 ErosUIFramework.Configure(
     jobTag: "SAM",
     jobName: "武士",
