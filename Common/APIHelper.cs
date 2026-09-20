@@ -1,4 +1,4 @@
-﻿using ECommons.DalamudServices;
+using ECommons.DalamudServices;
 using PromeRotation.Data;
 using PromeRotation.Helpers;
 
@@ -12,13 +12,13 @@ internal static class APIHelper
     #region QT 读写
 
     /// <summary>写入 QT 开关状态，并按联动表把关联的键一并写入。</summary>
+    /// <remarks>联动键同样走宿主 SetQt，保证落盘和状态通知不丢。联动只生效一层，不递归。</remarks>
     internal static void 设置QT(string qtKey, bool 值)
     {
         PromeSettings.Instance.SetQt(qtKey, 值);
-        var dict = PromeSettings.Instance.QuickToggles;
         if (ErosUIJobEnv.QtCascadeRules.TryGetValue(qtKey, out var links))
             foreach ((string lk, bool inv) in links)
-                dict[lk] = inv ? !值 : 值;
+                PromeSettings.Instance.SetQt(lk, inv ? !值 : 值);
     }
 
     /// <summary>清空后按当前职业与当前模式重新注册 QT，并同步显隐配置到宿主。</summary>

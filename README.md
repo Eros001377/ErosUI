@@ -95,8 +95,12 @@ ErosUI/
 
 - 通用（主题等）：`pluginConfigs\PromeRotation\Settings\ACRConfig\<作者>\Common.json`
 - 按职业：同目录 `{JobTag}.json`（如 `SAM.json`）
-- 首次使用按代码默认值自动落盘；想给某个职业预置出厂配置，
-  按 `Default{JobTag}.json` 提供嵌入资源即可（缺省同样走代码默认值）
+- 首次使用按代码默认值自动落盘；想给某个职业预置出厂配置，把 `Default{JobTag}.json`
+  放进本工程的 `Resources` 目录（会打进 DLL），或在 `Configure` 里传
+  `defaultSettingsJson` 直接注入 JSON 文本，二者取其一即可（缺省同样走代码默认值）
+
+注意：必须先调用 `Configure` 再读写设置。未注入职业环境就访问 `ErosUISettings.Instance`
+会直接抛异常——这是为了防止按空 QT 表误清用户已存的配置。
 
 ## 许可证
 

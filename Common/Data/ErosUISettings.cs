@@ -1,4 +1,4 @@
-﻿﻿using System.Text.Json;
+using System.Text.Json;
 using ECommons.DalamudServices;
 using ECommons.Logging;
 using PromeRotation.Config;
@@ -19,6 +19,10 @@ public class ErosUISettings
     {
         get
         {
+            // 没注入职业环境就读设置，会按空 QT 表把用户已存的排序/显隐配置清掉，直接拒绝
+            if (!ErosUIJobEnv.Configured)
+                throw new InvalidOperationException(
+                    "请先调用 ErosUIFramework.Configure 注入职业环境，再读写设置。");
             var job = 职业文件名;
             if (instance == null || loadedJob != job)
             {
@@ -292,6 +296,10 @@ public class ErosUISettings
     {
         get
         {
+            // 同样要求先注入职业环境，否则配置会写到占位作者名 "author" 的目录里
+            if (!ErosUIJobEnv.Configured)
+                throw new InvalidOperationException(
+                    "请先调用 ErosUIFramework.Configure 注入职业环境，再读写设置。");
             return ACRAuthorSetting.GetSettingsDirectory(ErosUIJobEnv.作者);
         }
     }
@@ -312,12 +320,13 @@ public class ErosUISettings
                     System.IO.Directory.CreateDirectory(dir);   // 已存在时为 no-op
                 return System.IO.Path.Combine(dir, 职业文件名 + ".json");
             }
-            catch
+            catch (Exception e) when (e is not InvalidOperationException)
             {
+                // 宿主目录拿不到时的兜底路径；文件名保持按职业分，和正常路径口径一致
                 return System.IO.Path.Combine(
                     System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
                     "XIVLauncherCN", "pluginConfigs", "PromeRotation", "Settings", "ACRConfig",
-                    ErosUIJobEnv.作者, $"{ErosUIJobEnv.作者}.Settings.json");
+                    ErosUIJobEnv.作者, 职业文件名 + ".json");
             }
         }
     }
@@ -352,12 +361,14 @@ public class ErosUISettings
         return new ErosUISettings();
     }
 
-    // 读取内嵌的首次使用默认配置（Resources/Default{职业文件名}.json，随 DLL 发布，按职业各一份）
+    // 读取首次使用的出厂默认配置：优先用使用方注入的 JSON（ErosUIFramework.Configure 的
+    // defaultSettingsJson 参数），没注入再找框架 DLL 内嵌的 Resources/Default{职业}.json，都没有返回 null
     private static ErosUISettings? LoadEmbeddedDefaults()
     {
         try
         {
-            var json = ReadEmbeddedDefaultJson($"Default{职业文件名}.json");
+            var json = ErosUIJobEnv.DefaultSettingsJson
+                       ?? ReadEmbeddedDefaultJson($"Default{职业文件名}.json");
             return json == null ? null : JsonSerializer.Deserialize<ErosUISettings>(json, JsonOptions);
         }
         catch (Exception e)

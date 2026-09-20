@@ -1,11 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <!-- ErosActionRangeHook 的原生函数委托带指针参数，需要 unsafe -->
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
 
         <!-- UI 框架类库输出：本仓库 bin（引用方 ACR 工程引用本 DLL, 不再直接部署游戏目录） -->
@@ -24,6 +22,13 @@
          后续适配繁中服：换 PromeRotation.SDK.TC 包并同步调整目标框架与宿主 API 差异。 -->
     <ItemGroup>
         <PackageReference Include="PromeRotation.SDK.CNGL" Version="0.1.0-preview.3" />
+    </ItemGroup>
+
+    <!-- 首次使用的出厂默认配置（可选）：把 Default{职业}.json 放到 Resources 目录就会打进 DLL，
+         首次运行时由 ErosUISettings 读出来作为初始配置。使用方也可以在 Configure 里
+         用 defaultSettingsJson 参数直接注入 JSON 文本，二者取其一即可。 -->
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\*.json" />
     </ItemGroup>
 
 
