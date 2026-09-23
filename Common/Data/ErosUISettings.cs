@@ -44,7 +44,7 @@ public class ErosUISettings
     public System.Numerics.Vector2? 控制条位置;
 
     // ============================================================
-    // === 热键面板（每职业一套布局; 外观框架两职业保持一致） ===
+    // === 热键面板（每职业一套布局; 外观默认值各职业一致） ===
     // ============================================================
     // 热键面板每行按钮数
     public int HotkeyColumns = 5;
@@ -65,7 +65,7 @@ public class ErosUISettings
     public bool HotkeyPanelOrderLocked = false;
 
     // ============================================================
-    // === QT 面板（每职业一套布局; 外观框架两职业保持一致; QT面板页滑块可调） ===
+    // === QT 面板（每职业一套布局; 外观默认值各职业一致; QT面板页滑块可调） ===
     // ============================================================
     // QT 面板每行按钮数
     public int QtPanelColumns = 3;
@@ -77,12 +77,12 @@ public class ErosUISettings
     public int QtPanelScalePercent = 100;
 
     // ============================================================
-    // === QT 面板排列顺序（每职业一套; QT面板页上移/下移 + 悬浮面板拖拽可调） ===
+    // === QT 面板排列顺序（每职业一套; 悬浮面板右键拖拽可调） ===
     // ============================================================
     // QT 面板按钮自定义顺序（完整键序; 未调整过为空 = 按 QT 表定义顺序显示）
     public List<string> QtOrder = new();
 
-    // 锁定 QT 排序: 开启后悬浮面板按钮不可拖拽换位（防战斗误拖）, 设置页上移/下移不受影响
+    // 锁定 QT 排序: 开启后悬浮面板按钮不可右键拖拽换位（防战斗误拖）
     public bool QtPanelOrderLocked = false;
 
     // ============================================================
@@ -290,7 +290,7 @@ public class ErosUISettings
 
     // 配置目录（稳定路径，与进程无关）：
     // 插件配置目录\PromeRotation\Settings\ACRConfig\<作者>——宿主 ACRAuthorSetting 按作者约定的
-    // 配置目录; 作者身份经 ErosUIJobEnv.Configure 注入（默认占位「ErosUI」, 使用方改成自己的作者名,
+    // 配置目录; 作者身份经 ErosUIJobEnv.Configure 注入（默认占位「author」, 使用方改成自己的作者名,
     // 与 RotationMetadata 的 Author 一致, 详见 README）; 目录不存在时由 FilePath 首次访问自动建。
     public static string SettingsDirectory
     {
@@ -379,7 +379,7 @@ public class ErosUISettings
     }
 
     // 读取内嵌出厂配置资源文本（Resources/Default*.json，随 DLL 发布; 资源缺失返回 null）。
-    // ErosUISettings（按职业）与 ErosUICommonSettings（通用 Common.json）的首次使用出厂配置共用此入口。
+    // 目前只有按职业设置（本类）的首次使用出厂配置走此入口。
     internal static string? ReadEmbeddedDefaultJson(string fileName)
     {
         try

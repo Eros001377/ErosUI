@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
 namespace ErosUI;
@@ -12,7 +12,7 @@ public abstract partial class SettingsWindowBase
     private const int SidebarChromeColorCount = 7;
 
     // 侧边栏按钮出现/消失动效状态（按标签记忆: T 0=收起 1=完全展开, 时间制缓动趋近目标值）。
-    // 新出现的标签从 0 展开（高度+透明度渐入）; 被移除的标签淡出到 0 后才从序列删除。
+    // 新出现的标签从 0 展开（高度+透明度渐入）; 被移除的标签立即从状态表删除（不做淡出）。
     private sealed class TabAnimState
     {
         public float T = 1f;
@@ -28,9 +28,9 @@ public abstract partial class SettingsWindowBase
     // 出现/收起动效时长（秒）
     private const float TabAnimDuration = 0.22f;
 
-    // 时间制 smoothstep 缓动（起步/收尾轻, 中段匀速）。
-    // 指数阻尼在这里上下卡顿: 首帧位移最大（点开瞬间跳一下）, 尾部长时间亚像素爬行
-    // 又被 ImGui 的整数取整吞掉, 视觉上变成「跳-停-跳」; 固定时长缓动每帧位移均匀可控。
+    // 时间制 smoothstep 缓动（起步/收尾轻, 中段最快、过渡平滑）。
+    // 指数阻尼在这里会卡顿: 首帧位移最大（点开瞬间跳一下）, 尾部长时间亚像素爬行
+    // 又被 ImGui 的整数取整吞掉, 视觉上变成「跳-停-跳」; 固定时长缓动总时长恒定、曲线平滑。
     private static void 推进TabAnim(TabAnimState st, float 目标, double now)
     {
         if (st.目标 != 目标)

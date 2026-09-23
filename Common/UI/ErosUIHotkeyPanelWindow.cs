@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface.Windowing;
@@ -11,7 +11,7 @@ using PromeRotation.UI.HotKey;
 
 namespace ErosUI;
 
-// ErosUI 风格热键面板：窗口外壳（NoBackground + viewport 背景层圆角底 +
+// ErosUI 风格热键面板：窗口外壳（NoBackground + 窗口绘制列表圆角底（垫牺牲帧防叠窗透出）+
 // 外扩裁剪描边 + 每帧按网格精确尺寸），图标/冷却/点击用宿主公开件渲染
 // （IHotkey/ActionHotkey/DelegateHotkey + IconHelper/ActionHelper/HotkeyQueueManager）。
 public sealed class ErosUIHotkeyPanelWindow : Window

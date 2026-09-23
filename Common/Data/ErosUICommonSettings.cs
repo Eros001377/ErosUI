@@ -1,4 +1,4 @@
-﻿﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Numerics;
 using ECommons.DalamudServices;
@@ -15,7 +15,7 @@ public class ErosUICommonSettings
     public static ErosUICommonSettings Instance => instance ??= Load();
 
     // === 主题 ===
-    // UI 主题模式（夜间/日间，全部 ErosUI 窗口与面板共用）; 代码回退默认 = 夜间, 与出厂默认资源一致。
+    // UI 主题模式（夜间/日间，全部 ErosUI 窗口与面板共用）; 代码回退默认 = 夜间。
     // JSON 键固定为旧名 UiMode，避免升级后老配置文件的主题偏好丢失。
     [JsonPropertyName("UiMode")]
     public SettingsUIMode UIMode = SettingsUIMode.Night;
@@ -32,7 +32,7 @@ public class ErosUICommonSettings
     public Vector3? PrimaryColorOverride;
 
     // ============================================================
-    // === JSON 持久化（路径与 ErosUISettings 同目录: Settings\ACRConfig\ErosUI\Common.json） ===
+    // === JSON 持久化（路径与 ErosUISettings 同目录: Settings\ACRConfig\<作者>\Common.json） ===
     // ============================================================
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -78,7 +78,7 @@ public class ErosUICommonSettings
 
     private static ErosUICommonSettings Normalize(ErosUICommonSettings s)
     {
-        // UIMode 出配置文件, 手改 JSON 或历史配置残留已移除的主题档可能出现未定义值, 越界一律回落夜间
+        // UIMode 的值来自配置文件, 手改 JSON 或历史配置残留已移除的主题档可能出现未定义值, 越界一律回落夜间
         if (s.UIMode is not (SettingsUIMode.Night or SettingsUIMode.Day))
             s.UIMode = SettingsUIMode.Night;
         if (s.PrimaryColorOverride is { } pc)

@@ -25,13 +25,10 @@ public static class ErosUIFramework
         IReadOnlyDictionary<string, (string key, bool invert)[]> qtCascadeRules,
         string[] hotkeyNames,
         System.Action<ErosUIHotkeyBuilder>? buildHotkeys,
-        (string key, string label, uint skill)[]? qtTab基础 = null,
-        (string key, string label, uint skill)[]? qtTab技能 = null,
-        (string key, string label, uint skill)[]? qtTab资源 = null,
         string? author = null,
         string? defaultSettingsJson = null)
         => ErosUIJobEnv.Configure(jobTag, jobName, qtAll, qtIsMetaKey, qtIsVisibleInMode,
-            qtDefault, qtCascadeRules, hotkeyNames, buildHotkeys, qtTab基础, qtTab技能, qtTab资源, author,
+            qtDefault, qtCascadeRules, hotkeyNames, buildHotkeys, author,
             defaultSettingsJson);
 
     /// <summary>注册全部窗口并完成初始化：构建热键面板、注册 QT、压制宿主自带面板。幂等，重复调用会先卸载再注册。OnEnterAcr 调用。</summary>

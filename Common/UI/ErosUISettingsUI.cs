@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using PromeRotation.Helpers;
 using PromeRotation.Data;
@@ -49,7 +49,7 @@ public static class ErosUISettingsUI
     }
 
     // 界面滑杆行：原生带标签滑杆（宽随调用方）。返回是否刚松手（提交信号, 供调用方落盘）。
-    private static bool 主题滑杆Int(string label, ref int value, int min, int max, float width)
+    private static bool 布局滑杆Int(string label, ref int value, int min, int max, float width)
     {
         ImGui.SetNextItemWidth(width);
         ImGui.SliderInt(label, ref value, min, max);
@@ -141,8 +141,8 @@ public static class ErosUISettingsUI
         Hdr("QT 按钮显隐管理");
         ImGui.TextWrapped("勾选 = 在 QT 面板显示该开关按钮；取消勾选 = 从 QT 面板隐藏。");
         ImGui.TextWrapped("显隐配置按日随/高难各存一套，改动只作用于当前模式；切换模式自动套用该模式的保存记录。");
-        ImGui.TextWrapped("模式专属开关只在所属模式的列表中显示（如日随专属的自动默想不在高难列表）。");
-        ImGui.TextWrapped("只控制显隐，不改变开关的当前状态。隐藏后QT仍按默认值生效。");
+        ImGui.TextWrapped("模式专属开关只在所属模式的列表中显示（如日随专属开关不会出现在高难列表）。");
+        ImGui.TextWrapped("只控制显隐，不改变开关的当前状态；隐藏的开关在循环逻辑中仍按当前状态生效。");
         DrawModeSwitchRow();
 
         // QT 面板布局调整（同 Hotkey 页滑块模式; 面板每帧按设置重排, 改动松手即存即生效）
@@ -152,23 +152,23 @@ public static class ErosUISettingsUI
         var sliderWidth = 360f;
 
         int cols = s.QtPanelColumns;
-        var colsSaved = 主题滑杆Int("每行数量", ref cols, 1, 6, sliderWidth);
+        var colsSaved = 布局滑杆Int("每行数量", ref cols, 1, 6, sliderWidth);
         s.QtPanelColumns = cols;          // 拖动中只改内存值, 面板实时跟随
         bool save = colsSaved;            // 松手才落盘
 
         int spacing = s.QtPanelSpacing;
-        save |= 主题滑杆Int("间隔(px)", ref spacing, 0, 20, sliderWidth);
+        save |= 布局滑杆Int("间隔(px)", ref spacing, 0, 20, sliderWidth);
         s.QtPanelSpacing = spacing;
 
         int scale = s.QtPanelScalePercent;
-        save |= 主题滑杆Int("缩放(%)", ref scale, 50, 200, sliderWidth);
+        save |= 布局滑杆Int("缩放(%)", ref scale, 50, 200, sliderWidth);
         s.QtPanelScalePercent = scale;
 
         if (save) s.Save();
 
         // QT 排序模块: 标题 + 排序说明 + 锁定开关
         Hdr("QT 排序");
-        ImGui.TextWrapped("QT 面板按钮的排列顺序在悬浮面板上按住鼠标右键拖动调整，改动即时生效并与本页顺序同步。");
+        ImGui.TextWrapped("QT 面板按钮的排列顺序在悬浮面板上按住鼠标右键拖动调整（同一分类组内换位），改动即时生效并与本页顺序同步。");
         var locked = s.QtPanelOrderLocked;
         if (SettingRow.Checkbox("锁定QT排序", ref locked, "开启后 QT 悬浮面板按钮不可右键拖拽换位（防战斗误拖）"))
         {
@@ -210,16 +210,16 @@ public static class ErosUISettingsUI
         var sliderWidth = 360f;
 
         int columns = s.HotkeyColumns;
-        rebuild |= 主题滑杆Int("每行数量", ref columns, 1, 12, sliderWidth);
+        rebuild |= 布局滑杆Int("每行数量", ref columns, 1, 12, sliderWidth);
         s.HotkeyColumns = columns;                      // 拖动中只改内存值
         // 松手才重建，避免拖动中每帧建销面板窗口
 
         int spacing = s.HotkeySpacing;
-        rebuild |= 主题滑杆Int("间隔(px)", ref spacing, 0, 20, sliderWidth);
+        rebuild |= 布局滑杆Int("间隔(px)", ref spacing, 0, 20, sliderWidth);
         s.HotkeySpacing = spacing;
 
         int scale = s.HotkeyScalePercent;
-        rebuild |= 主题滑杆Int("缩放(%)", ref scale, 50, 200, sliderWidth);
+        rebuild |= 布局滑杆Int("缩放(%)", ref scale, 50, 200, sliderWidth);
         s.HotkeyScalePercent = scale;
 
         // 热键排序模块: 标题 + 排序说明 + 锁定开关（与 QT 排序模块同一套交互）

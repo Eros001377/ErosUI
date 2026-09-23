@@ -1,17 +1,17 @@
-﻿using System.Numerics;
+using System.Numerics;
 
 namespace ErosUI;
 
-// 独立设置窗口配色：通用主色调（可自定义覆盖）+ Dark/Light 双色彩方案（夜间/日间模式共用侧边栏布局，配色由方案区分）。
+// ErosUI 各窗口共用配色：通用主色调（可自定义覆盖）+ Dark/Light 双色彩方案（布局共用，配色由方案区分）。
 // 只用于窗口全局样式 Push/Pop，不做卡片/高亮/发光。
 public static class SimplePalette
 {
-    // 色彩方案：Dark = 简约/夜间模式（深底浅字），Light = 日间模式（浅底深字）。
+    // 色彩方案：Dark = 夜间模式（深底浅字），Light = 日间模式（浅底深字）。
     public enum UIColorScheme { Dark, Light }
 
     private static UIColorScheme currentScheme = UIColorScheme.Dark;
 
-    // 切换色彩方案（由各窗口在 PreDraw/Draw 按设置的主题每帧写入）。
+    // 切换色彩方案（由各窗口在 PreDraw 按设置的主题每帧写入）。
     public static void ApplyScheme(UIColorScheme scheme)
     {
         if (currentScheme == scheme) return;

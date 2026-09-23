@@ -1,11 +1,11 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 
 namespace ErosUI;
 
-// ErosUI 武士设置窗口基类（Dalamud WindowSystem 托管）。
+// ErosUI 设置窗口基类（Dalamud WindowSystem 托管，多职业共用）。
 // 夜间/日间模式 = 同一套侧边栏布局（SettingsWindowBase.Sidebar.cs）+ 深色/米白纯色半透明底色（无模糊）
 // （配色分别在 SettingsWindowBase.Night.cs / .Day.cs，行样式见 SidebarSettingRow.cs）。
 // 通过末位「主题」标签页切换（基类绘制），偏好存于 ErosUICommonSettings.UIMode。
@@ -56,7 +56,7 @@ public abstract partial class SettingsWindowBase : Window
     // 绘制当前 Tab 的内容
     protected abstract void DrawTabContent(int tabIndex);
 
-    // 窗口位置/尺寸持久化（可选，返回 null 则每帧实时读取）
+    // 窗口位置/尺寸持久化（可选，返回 null 则不持久化）
     protected virtual WindowLayoutState? Layout => null;
 
     protected SettingsWindowBase(string title)
@@ -117,12 +117,12 @@ public abstract partial class SettingsWindowBase : Window
     {
         try
         {
-            // 毛玻璃背景
+            // 纯色半透明背景
             DrawWindowBackground();
 
             DrawSidebarLayout();
 
-            // 仅在窗口当前有效时捕获位置/尺寸；待用户拖动/缩放结束后一次性写盘
+            // 只捕获落在合理范围内的位置/尺寸（防垃圾值）；待用户拖动/缩放结束后一次性写盘
             CaptureLayout();
         }
         catch (Exception ex)
@@ -199,7 +199,7 @@ public abstract partial class SettingsWindowBase : Window
         v.X >= -2000f && v.Y >= -2000f && v.X < 10000f && v.Y < 10000f;
 
     // 「主题」标签页：最上方主题主色 RGB 调色（见 DrawPrimaryColorSection），
-    // 下方界面主题切换（当前主题仅标注不可点；各模式用自己的行控件）。
+    // 下方界面主题切换（当前主题仅标注不可点）。
     private void DrawThemeTabContent()
     {
         DrawPrimaryColorSection();
@@ -266,10 +266,10 @@ public abstract partial class SettingsWindowBase : Window
     {
         if (this.mode == mode)
         {
-            SettingRow.Button($"{label}（当前）");
+            SettingRow.Button($"{label}（当前）", tooltip);
             return;
         }
-        if (SettingRow.Button(label))
+        if (SettingRow.Button(label, tooltip))
         {
             ErosUICommonSettings.Instance.SetUIMode(mode);
         }
@@ -314,7 +314,7 @@ public abstract partial class SettingsWindowBase : Window
         ImGui.PushStyleColor(ImGuiCol.Text, SimplePalette.TextPrimary);
         ImGui.PushStyleColor(ImGuiCol.TextDisabled, SimplePalette.TextDisabled);
 
-        // 按钮（Tab 用，其它由主题色点绶）
+        // 按钮（侧边栏导航用，其余控件由主题色着色）
         ImGui.PushStyleColor(ImGuiCol.Button, SimplePalette.FrameBg);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, SimplePalette.FrameBgHovered);
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, SimplePalette.FrameBgActive);

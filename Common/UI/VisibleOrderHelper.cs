@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 
 namespace ErosUI;
 
@@ -46,13 +46,5 @@ public static class VisibleOrderHelper
         var step = 1f - MathF.Exp(-MathF.Max(0.01f, speed) * Math.Clamp(deltaTime, 0f, 0.1f));
         var next = current + (target - current) * step;
         return Vector2.DistanceSquared(next, target) < 0.01f ? target : next;
-    }
-
-    // 标量版同一条指数阻尼曲线（侧边栏按钮出现/收起等单值动效用），与 AnimatePosition 同速度常量。
-    public static float AnimateValue(float current, float target, float deltaTime, float speed = DefaultAnimationSpeed)
-    {
-        var step = 1f - MathF.Exp(-MathF.Max(0.01f, speed) * Math.Clamp(deltaTime, 0f, 0.1f));
-        var next = current + (target - current) * step;
-        return MathF.Abs(next - target) < 0.01f ? target : next;
     }
 }

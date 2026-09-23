@@ -1,9 +1,9 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 
 namespace ErosUI;
 
-// 日间模式配色：米白半透明纯色底色（无模糊，模糊仅简约模式）+ 标题栏/滚动条主色调样式（浅色）。
+// 日间模式配色：米白半透明纯色底色（无模糊）+ 标题栏/滚动条主色调样式（浅色）。
 // 布局在 SettingsWindowBase.Sidebar.cs（与夜间模式共用）。
 public abstract partial class SettingsWindowBase
 {

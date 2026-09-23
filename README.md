@@ -2,7 +2,7 @@
 
 基于 PromeRotation 的 ACR 通用 UI 框架，从 ErosACR 的默认主题中分离而来。接入后你的 ACR 直接获得一套完整的界面：
 
-- QT / Hotkey 悬浮面板：按钮显隐、右键拖拽排序、布局可调
+- QT / Hotkey 悬浮面板：按钮显隐、右键拖拽排序、布局可调（QT 面板按 Category 分类分组）
 - 战斗控制条：运行 / 停手 / 主动攻击 / 设置入口
 - 日夜双主题，主色 RGB 自定义
 
@@ -38,7 +38,6 @@ ErosUIFramework.Configure(
         b.Fixed("疾跑", 7571u, ActionType.OffGcd, ActionTargetType.Self);
         b.Execute("爆发药", new ExecuteLogic(() => { /* ... */ }));
     },
-    qtTab基础: [ ("aoe", "AOE 模式", 0u) ],
     author: "你的作者名");   // 见下文「作者身份」
 ```
 
@@ -60,7 +59,7 @@ public void OnExitAcr() => ErosUIFramework.Uninstall();
 | `ErosUIFramework` | 唯一公共入口：Configure 注入、Install/Uninstall 装卸（内含热键/QT/落盘）、面板开关 |
 | `Common/UI/SettingsWindowBase*` | 设置窗口（侧边栏页签布局 + 主题页） |
 | `Common/UI/ErosUISettingsUI.cs` | 设置页内容（基础设置 / Hotkey / QT面板 三页） |
-| `Common/UI/ErosUIQtPanelWindow.cs` | QT 悬浮面板（网格布局、拖拽排序、按模式记忆显隐） |
+| `Common/UI/ErosUIQtPanelWindow.cs` | QT 悬浮面板（按 Category 分组网格、组内拖拽排序、按模式记忆显隐） |
 | `Common/UI/ErosUIHotkeyPanelWindow.cs` | 热键悬浮面板（图标、冷却、队列待发提示） |
 | `Common/UI/CombatControlWindow*.cs` | 战斗控制条（运行/停手/主动攻击/设置入口） |
 | `Common/UI/SimplePalette.cs` | 日间/夜间双主题色板，主题页可自定义主色 |

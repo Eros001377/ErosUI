@@ -1,10 +1,10 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using PromeRotation.Data;
 
 namespace ErosUI;
 
-// 战斗控制悬浮条侧边栏模式（夜间/日间）：实心状态按钮（绿/黄/红 + 白色方块标记）
+// 战斗控制悬浮条（夜间/日间模式）：实心状态按钮（绿/黄/红 + 白色方块标记）
 // + 1px 竖分隔线 + 按钮化主动攻击（开启时实心红）+ 深色/白色设置按钮。
 // 状态按钮左键 运行⇄关闭、右键 运行⇄停手；主动攻击切换 AutoPull。
 // 两模式差异只有纯色半透明底色，其余颜色随 SimplePalette 方案自动切换。
@@ -21,7 +21,7 @@ public sealed partial class CombatControlWindow
 
     private const float ModernButtonHeight = 34f;
 
-    // 现代模式按钮圆角：必须明显小于悬浮条本身的 10f（圆角分层）。
+    // 悬浮条按钮圆角：必须明显小于悬浮条本身的 10f（圆角分层）。
     private const float ModernButtonRounding = 6f;
 
     private const float StateButtonWidth = 118f;

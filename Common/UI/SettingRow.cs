@@ -1,10 +1,10 @@
-﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Bindings.ImGui;
 
 namespace ErosUI;
 
-// 设置行工具（简约模式实现）：每个方法对应一行设置，自动处理标签、tooltip、值变更回调。
-// 夜间/日间模式的行样式由 SidebarSettingRow 承载（两模式共用布局，配色随 SimplePalette 方案），
-// 本类仅按 Mode 分发，不含其实现。
+// 设置行工具：每个方法对应一行设置，自动处理标签、tooltip、值变更回调。
+// 行控件统一转发 SidebarSettingRow（夜间/日间共用布局，配色随 SimplePalette 方案）；
+// Checkbox/Button 无模式差异，直接用 ImGui 原生。
 // 所有控件使用 ImGui 原生，宽度固定，不做卡片。
 public static class SettingRow
 {

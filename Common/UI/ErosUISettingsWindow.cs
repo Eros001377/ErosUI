@@ -1,10 +1,10 @@
-﻿
+
 namespace ErosUI;
 
 // ErosUI 设置窗口（SettingsWindowBase 子类，多职业共用同一窗口类）。
-// 标题按职业环境注入（「ErosUI 武士设置」/「ErosUI 钐镰客设置」），页签结构两职业完全一致：
+// 标题按职业环境注入（"{作者} {JobName}设置"），页签结构各职业一致：
 // 基础设置 / Hotkey / QT面板，末位「主题」页由基类提供（夜间/日间）。
-// 主题 页为多职业通用内容（ErosUICommonSettings），其余页读当前职业数据。
+// 「主题」页为多职业通用内容（ErosUICommonSettings），其余页读当前职业数据。
 public sealed class ErosUISettingsWindow : SettingsWindowBase
 {
 

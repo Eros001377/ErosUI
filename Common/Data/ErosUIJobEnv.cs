@@ -11,7 +11,7 @@ internal static class ErosUIJobEnv
     /// <summary>是否已经注入过职业环境。没注入就读写设置会清掉用户配置，框架用它拦住这种误用。</summary>
     public static bool Configured { get; private set; }
 
-    /// <summary>职业短名（如 SAM / RPR），用作窗口名与配置文件名后缀。</summary>
+    /// <summary>职业短名（如 SAM / RPR），用作窗口名与配置文件名（{JobTag}.json）。</summary>
     public static string JobTag { get; private set; } = "SAM";
 
     /// <summary>职业中文名，用于设置窗口标题。</summary>
@@ -44,16 +44,7 @@ internal static class ErosUIJobEnv
     /// <summary>热键面板条目构建委托。框架不预置任何按钮，全部条目由使用方在此注册。</summary>
     public static System.Action<ErosUIHotkeyBuilder>? BuildHotkeys { get; private set; }
 
-    /// <summary>QT 设置页「基础」页签的开关清单。元组为（键, 显示名, 技能ID），技能ID 为 0 时不校验解锁。</summary>
-    public static (string key, string label, uint skill)[] QtTab基础 { get; private set; } = Array.Empty<(string, string, uint)>();
-
-    /// <summary>QT 设置页「技能」页签的开关清单，格式同 QtTab基础。</summary>
-    public static (string key, string label, uint skill)[] QtTab技能 { get; private set; } = Array.Empty<(string, string, uint)>();
-
-    /// <summary>QT 设置页「资源」页签的开关清单，格式同 QtTab基础。</summary>
-    public static (string key, string label, uint skill)[] QtTab资源 { get; private set; } = Array.Empty<(string, string, uint)>();
-
-    /// <summary>首次使用时写入的出厂配置 JSON（可选，内容是完整的 ErosUISettings 序列化结果）。不注入就走代码里的默认值。</summary>
+    /// <summary>首次使用时写入的出厂配置 JSON（可选，内容是完整的 ErosUISettings 序列化结果）。不注入则找框架 DLL 内嵌的 Resources/Default{JobTag}.json，仍没有才走代码里的默认值。</summary>
     public static string? DefaultSettingsJson { get; private set; }
 
     /// <summary>注入本职业的全部环境，由 ErosUIFramework.Configure 转发调用。</summary>
@@ -67,9 +58,6 @@ internal static class ErosUIJobEnv
         IReadOnlyDictionary<string, (string key, bool invert)[]> qtCascadeRules,
         string[] hotkeyNames,
         System.Action<ErosUIHotkeyBuilder>? buildHotkeys,
-        (string key, string label, uint skill)[]? qtTab基础 = null,
-        (string key, string label, uint skill)[]? qtTab技能 = null,
-        (string key, string label, uint skill)[]? qtTab资源 = null,
         string? author = null,
         string? defaultSettingsJson = null)
     {
@@ -83,9 +71,6 @@ internal static class ErosUIJobEnv
         QtCascadeRules = qtCascadeRules;
         HotkeyNames = hotkeyNames;
         BuildHotkeys = buildHotkeys;
-        if (qtTab基础 != null) QtTab基础 = qtTab基础;
-        if (qtTab技能 != null) QtTab技能 = qtTab技能;
-        if (qtTab资源 != null) QtTab资源 = qtTab资源;
         DefaultSettingsJson = defaultSettingsJson;
         Configured = true;
     }
